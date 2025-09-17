@@ -1,0 +1,71 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix schema: <http://schema.org/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix dbpedia-owl: <http://dbpedia.org/ontology/> .
+@prefix dbpedia-res: <http://dbpedia.org/resource/> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+@prefix res: <https://kg-football.vn/resource/> .
+
+<https://kg-football.vn/ontology>
+  a owl:Ontology ;
+  dct:title "KG-Football Ontology"@en ;
+  dct:creator "KG Football Team" ;
+  dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+  dct:issued "2025-09-17"^^xsd:date ;
+  owl:versionInfo "0.1.0" .
+
+kg:Player a owl:Class ;
+  rdfs:label "Player"@en , "Cầu thủ"@vi ;
+  rdfs:comment "Professional football player"@en .
+
+kg:Club a owl:Class ;
+  rdfs:label "Club"@en , "Câu lạc bộ"@vi .
+
+kg:Match a owl:Class ;
+  rdfs:label "Match"@en , "Trận đấu"@vi .
+
+kg:Position a owl:Class ;
+  rdfs:label "Position"@en , "Vị trí"@vi .
+
+kg:playsFor a owl:ObjectProperty ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Club ;
+  rdfs:label "plays for"@en , "thi đấu cho"@vi .
+
+kg:position a owl:ObjectProperty ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Position .
+
+kg:birthDate a owl:DatatypeProperty ;
+  rdfs:domain kg:Player ;
+  rdfs:range xsd:date .
+
+kg:shirtNumber a owl:DatatypeProperty ;
+  rdfs:domain kg:Player ;
+  rdfs:range xsd:integer .
+
+# Alignment (simple)
+kg:Player rdfs:subClassOf schema:Person , dbpedia-owl:SoccerPlayer .
+kg:Club rdfs:subClassOf schema:SportsTeam .
+
+# Sample individuals
+res:player/Nguyen_Van_A a kg:Player ;
+  foaf:name "Nguyễn Văn A"@vi ;
+  kg:birthDate "1998-05-10"^^xsd:date ;
+  kg:position res:position/Defender ;
+  kg:playsFor res:club/Ha_Noi_FC ;
+  owl:sameAs dbpedia-res:Nguyen_Van_A ;
+  prov:wasDerivedFrom <https://vi.wikipedia.org/wiki/Nguy%E1%BB%85n_V%C4%83n_A> ;
+  cc:license <https://creativecommons.org/licenses/by-sa/4.0/> .
+
+res:club/Ha_Noi_FC a kg:Club ;
+  rdfs:label "Hà Nội FC"@vi .
+
+res:position/Defender a kg:Position ;
+  rdfs:label "Hậu vệ"@vi , "Defender"@en .

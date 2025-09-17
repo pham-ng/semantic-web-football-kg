@@ -1,0 +1,20 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+@prefix res: <https://kg-football.vn/resource/> .
+
+kg:PlayerShape a sh:NodeShape ;
+  sh:targetClass kg:Player ;
+  sh:property [
+    sh:path kg:birthDate ;
+    sh:datatype xsd:date ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path kg:playsFor ;
+    sh:class kg:Club ;
+    sh:minCount 1 ;
+  ] .
+
+kg:ClubShape a sh:NodeShape ;
+  sh:targetClass kg:Club .
