@@ -1,0 +1,36 @@
+https://vietnamnet.vn/the-thao/bong-da-viet-nam	HTTPSConnectionPool(host='vietnamnet.vn', port=443): Max retries exceeded with url: /the-thao/bong-da-viet-nam (Caused by ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))
+https://nhandan.vn/bong-da-viet-nam/	404 Client Error: Not Found for url: https://nhandan.vn/404?url=https://nhandan.vn/bong-da-viet-nam/
+https://bongdaplus.vn/bong-da-viet-nam//cup-nivea-men	404 Client Error: Not Found for url: https://bongdaplus.vn/bong-da-viet-nam//cup-nivea-men
+https://www.facebook.com/BaoBongDa/	robots_disallow
+https://www.facebook.com/BaoBongDa	robots_disallow
+https://bongda.com.vn/tran-dau/4947172/statistic/champions-league-fc-koebenhavn-bayer-leverkusen                        	404 Client Error: Not Found for url: https://bongda.com.vn/tran-dau/4947172/statistic/champions-league-fc-koebenhavn-bayer-leverkusen%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20
+https://bongda.com.vn/tran-dau/4947192/statistic/champions-league-club-brugge-monaco                        	404 Client Error: Not Found for url: https://bongda.com.vn/tran-dau/4947192/statistic/champions-league-club-brugge-monaco%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20
+https://bongda.com.vn/tran-dau/4947162/statistic/champions-league-manchester-city-ssc-napoli                        	404 Client Error: Not Found for url: https://bongda.com.vn/tran-dau/4947162/statistic/champions-league-manchester-city-ssc-napoli%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20
+https://bongda.com.vn/tran-dau/4947153/statistic/champions-league-newcastle-united-barcelona                        	404 Client Error: Not Found for url: https://bongda.com.vn/tran-dau/4947153/statistic/champions-league-newcastle-united-barcelona%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20
+https://bongda.com.vn/tran-dau/4947197/statistic/champions-league-eintracht-frankfurt-galatasaray                        	404 Client Error: Not Found for url: https://bongda.com.vn/tran-dau/4947197/statistic/champions-league-eintracht-frankfurt-galatasaray%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20
+https://bongda.com.vn/tran-dau/4947226/statistic/champions-league-sporting-cp-kairat-almaty                        	404 Client Error: Not Found for url: https://bongda.com.vn/tran-dau/4947226/statistic/champions-league-sporting-cp-kairat-almaty%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20
+https://www.facebook.com/fpbongda	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=V.League 2025/26	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=Press Cup	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=V.League Awards 2025	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=vòng loại Asian Cup 2027	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=giấc mơ World Cup	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=Giải vô địch bóng đá châu Á-Asian Cup 2027	robots_disallow
+https://nhandan.vn/tu-khoa.html?q=ASEAN Cup 2024	robots_disallow
+https://bongdaplus.vn/u17-quoc-gia//lich-su-u17	404 Client Error: Not Found for url: https://bongdaplus.vn/u17-quoc-gia//lich-su-u17
+https://bongdaplus.vn/world-cup//vong-loai	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//vong-loai
+https://bongdaplus.vn/world-cup//vong-chung-ket	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//vong-chung-ket
+https://bongdaplus.vn/world-cup//tin-moi-nhat	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//tin-moi-nhat
+https://bongdaplus.vn/world-cup//nong-tu-brazil	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//nong-tu-brazil
+https://bongdaplus.vn/world-cup//lich-su	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//lich-su
+https://bongdaplus.vn/world-cup//ban-doc	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//ban-doc
+https://bongdaplus.vn/world-cup//doi-tuyen	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//doi-tuyen
+https://bongdaplus.vn/world-cup//goc-chuyen-mon	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//goc-chuyen-mon
+https://bongdaplus.vn/world-cup//ngay-thi-dau	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//ngay-thi-dau
+https://bongdaplus.vn/world-cup//fan-phet-mua-world-cup	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//fan-phet-mua-world-cup
+https://bongdaplus.vn/world-cup//binh-luan	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//binh-luan
+https://bongdaplus.vn/world-cup//anh-dep	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//anh-dep
+https://bongdaplus.vn/world-cup//goc-chuyen-gia	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//goc-chuyen-gia
+https://bongdaplus.vn/world-cup//chuyen-phiem	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//chuyen-phiem
+https://bongdaplus.vn/world-cup//muon-mau	404 Client Error: Not Found for url: https://bongdaplus.vn/world-cup//muon-mau
+https://bongdaplus.vn/the-thao//mon-the-thao-khac	404 Client Error: Not Found for url: https://bongdaplus.vn/the-thao//mon-the-thao-khac

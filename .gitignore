@@ -12,7 +12,9 @@ node_modules/
 /tmp/
 *.log
 /data/outputs/
-bronze/raw/
+bronze/raw
+bronze/wiki_raw
+bronze/raw_web
 
 # IDE
 .vscode/

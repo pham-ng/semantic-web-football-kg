@@ -1,0 +1,19 @@
+{
+  "mode": "wikitext",
+  "query": {
+    "pages": [
+      {
+        "ns": 0,
+        "title": "Đội tuyển bóng đá U23 Việt Nam",
+        "missing": true,
+        "contentmodel": "wikitext",
+        "pagelanguage": "vi",
+        "pagelanguagehtmlcode": "vi",
+        "pagelanguagedir": "ltr",
+        "fullurl": "https://vi.wikipedia.org/wiki/%C4%90%E1%BB%99i_tuy%E1%BB%83n_b%C3%B3ng_%C4%91%C3%A1_U23_Vi%E1%BB%87t_Nam",
+        "editurl": "https://vi.wikipedia.org/w/index.php?title=%C4%90%E1%BB%99i_tuy%E1%BB%83n_b%C3%B3ng_%C4%91%C3%A1_U23_Vi%E1%BB%87t_Nam&action=edit",
+        "canonicalurl": "https://vi.wikipedia.org/wiki/%C4%90%E1%BB%99i_tuy%E1%BB%83n_b%C3%B3ng_%C4%91%C3%A1_U23_Vi%E1%BB%87t_Nam"
+      }
+    ]
+  }
+}

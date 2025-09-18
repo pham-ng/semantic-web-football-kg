@@ -10,21 +10,19 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from tqdm import tqdm
 from collections import deque
-from typing import Set
+from typing import Set, List, Dict, Tuple
 
-OUTPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../bronze/raw"))
-DONE_FILE = os.path.join(OUTPUT_DIR, "..", "done.txt")
-ERROR_FILE = os.path.join(OUTPUT_DIR, "..", "error.txt")
+OUTPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../bronze/wiki_raw"))
+DONE_FILE = os.path.join(OUTPUT_DIR, "..", "wiki_done.txt")
+ERROR_FILE = os.path.join(OUTPUT_DIR, "..", "wiki_error.txt")
 
 WIKI_API = "https://vi.wikipedia.org/w/api.php"
-REST_SUMMARY = "https://vi.wikipedia.org/api/rest_v1/page/summary/"
 
 # Mặc định (có thể override qua CLI)
 DEFAULT_MAX_DEPTH = 3
-DEFAULT_MAX_PAGES = 25000
+DEFAULT_MAX_PAGES = 5000
 DEFAULT_DELAY = 0.3
-DEFAULT_FULL = True  # False: chỉ intro, True: toàn bộ phần văn bản
-DEFAULT_MODE = "extract"  # extract | wikitext | html
+BATCH_SIZE = 20  # số title mỗi lần gọi API
 
 # Phân loại lỗi
 RETRYABLE_STATUS = {403, 408, 429, 500, 502, 503, 504, 520, 522}
@@ -38,14 +36,17 @@ FOOTBALL_KEYWORDS = [
     "v.league",
     "vleague",
     "cup",
-    "futsal",
     "giải vô địch",
     "đội tuyển",
     "huấn luyện viên",
     "sân vận động",
     "aff",
     "sea games",
+    "world cup",
     "cầu thủ",
+    "ngoại hạng",
+    "champions league",
+    "champions cup",
 ]
 
 TOPICS = [
@@ -68,12 +69,14 @@ TOPICS = [
     "Lương Xuân Trường",
     "Bóng đá trẻ Việt Nam",
     "Bóng đá nữ Việt Nam",
-    "Futsal Việt Nam",
     "Lịch sử bóng đá Việt Nam",
     "Liên đoàn bóng đá Việt Nam",
     "Sân vận động Mỹ Đình",
     "Huấn luyện viên Park Hang-seo",
     "Giải hạng Nhất Quốc gia Việt Nam",
+    "World Cup",
+    "Champion League",
+    "Ngoại hạng Anh",
 ]
 
 
@@ -85,7 +88,7 @@ def get_session() -> requests.Session:
     }
     session.headers.update(headers)
     retry = Retry(
-        total=5,
+        total=3,
         backoff_factor=1.0,
         status_forcelist=list(RETRYABLE_STATUS),
         allowed_methods=["GET"],
@@ -100,80 +103,39 @@ def get_session() -> requests.Session:
 SESSION = get_session()
 
 
-def fetch_page(title: str, *, mode: str = DEFAULT_MODE, full: bool = DEFAULT_FULL):
-    """Trả về dữ liệu trang theo mode:
-    - extract: dùng extracts (intro hoặc full text)
-    - wikitext: dùng revisions API để lấy wikitext đầy đủ
-    - html: dùng action=parse&prop=text để lấy HTML render
-    """
-    if mode == "wikitext":
-        params = {
-            "action": "query",
-            "prop": "revisions|info",
-            "titles": title,
-            "rvprop": "content",
-            "rvslots": "main",
-            "format": "json",
-            "formatversion": 2,
-            "utf8": 1,
-            "maxlag": 5,
-            "redirects": 1,
-            "inprop": "url",
-        }
-        r = SESSION.get(WIKI_API, params=params, timeout=30)
-        r.raise_for_status()
-        j = r.json()
-        return {"mode": mode, "query": j.get("query", {})}, r.status_code
-
-    if mode == "html":
-        params = {
-            "action": "parse",
-            "page": title,
-            "prop": "text|links|templates",
-            "format": "json",
-            "utf8": 1,
-            "maxlag": 5,
-            "redirects": 1,
-        }
-        r = SESSION.get(WIKI_API, params=params, timeout=30)
-        r.raise_for_status()
-        j = r.json()
-        return {"mode": mode, "parse": j.get("parse", {})}, r.status_code
-
-    # default: extract
+def fetch_pages_wikitext(titles: List[str]) -> Dict[str, dict]:
+    """Lấy wikitext đầy đủ cho danh sách titles (batch). Trả về map title -> page dict."""
     params = {
         "action": "query",
-        "prop": "extracts|pageimages|info",
-        "explaintext": True,
-        "inprop": "url",
+        "prop": "revisions|info",
+        "titles": "|".join(titles),
+        "rvprop": "content",
+        "rvslots": "main",
         "format": "json",
         "formatversion": 2,
         "utf8": 1,
         "maxlag": 5,
-        "titles": title,
-        "pithumbsize": 300,
         "redirects": 1,
+        "inprop": "url",
     }
-    if not full:
-        params["exintro"] = True
-
     r = SESSION.get(WIKI_API, params=params, timeout=30)
-    if r.status_code in (403, 429):
-        # Fallback sang REST summary API (chỉ tóm tắt)
-        ru = REST_SUMMARY + quote(title)
-        r2 = SESSION.get(ru, timeout=30)
-        r2.raise_for_status()
-        j = r2.json()
-        page = {
-            "title": j.get("title", title),
-            "extract": j.get("extract", ""),
-            "content_urls": j.get("content_urls", {}),
-            "thumbnail": j.get("thumbnail", {}),
-        }
-        return {"mode": mode, "query": {"pages": [page]}}, r.status_code
     r.raise_for_status()
     j = r.json()
-    return {"mode": mode, "query": j.get("query", {})}, r.status_code
+    result: Dict[str, dict] = {}
+    # resolve redirects map
+    redirects = {}
+    for rd in j.get("query", {}).get("redirects", []) or []:
+        redirects[rd.get("from")] = rd.get("to")
+    for p in j.get("query", {}).get("pages", []) or []:
+        title = p.get("title")
+        if not title:
+            continue
+        result[title] = p
+    # also map original request titles via redirects
+    for t in titles:
+        if t in redirects and redirects[t] in result:
+            result[t] = result[redirects[t]]
+    return result
 
 
 def fetch_links(title: str, delay: float):
@@ -253,7 +215,7 @@ def append_error(title: str, status: int, retryable: bool, message: str):
         f.write(f"{title}\t{status}\t{1 if retryable else 0}\t{ts}\t{message}\n")
 
 
-def run(max_depth: int, max_pages: int, delay: float, full: bool, mode: str):
+def run(max_depth: int, max_pages: int, delay: float):
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     done = set()
@@ -263,47 +225,63 @@ def run(max_depth: int, max_pages: int, delay: float, full: bool, mode: str):
 
     permanent_error_skip = load_permanent_errors()
 
-    results = []
-    queue = deque([(t, 0) for t in TOPICS])
+    saved_count = 0
+    queue: deque[Tuple[str, int]] = deque([(t, 0) for t in TOPICS])
     visited = set(done) | set(permanent_error_skip)
 
-    with tqdm(total=max_pages, desc="Crawling Wikipedia BFS") as pbar:
-        while queue and (len(results) + len(done)) < max_pages:
-            title, depth = queue.popleft()
-            if title in visited:
-                continue
-            visited.add(title)
-            try:
-                data, status = fetch_page(title, mode=mode, full=full)
-                results.append({"title": title, "data": data})
-                fn = save_page_json(title, data)
-                with open(DONE_FILE, "a", encoding="utf-8") as f:
-                    f.write(title + "\n")
-                pbar.update(1)
+    with tqdm(total=max_pages, desc="Crawling Wikipedia (wikitext)") as pbar:
+        while queue and saved_count < max_pages:
+            # build a batch
+            batch_titles: List[str] = []
+            depth_by_title: Dict[str, int] = {}
+            while queue and len(batch_titles) < min(BATCH_SIZE, max_pages - saved_count):
+                title, depth = queue.popleft()
+                if title in visited:
+                    continue
+                visited.add(title)
+                batch_titles.append(title)
+                depth_by_title[title] = depth
 
-                if depth < max_depth:
-                    try:
-                        for lt in fetch_links(title, delay):
-                            if lt not in visited and is_footballish(lt):
-                                queue.append((lt, depth + 1))
-                    except Exception as le:
-                        print(f"⚠️ Link expand error for {title}: {le}")
+            if not batch_titles:
+                break
+
+            try:
+                pages_map = fetch_pages_wikitext(batch_titles)
+                for original_title in batch_titles:
+                    page = pages_map.get(original_title)
+                    if not page:
+                        append_error(original_title, 404, False, "page_not_found")
+                        continue
+                    save_page_json(original_title, {"mode": "wikitext", "query": {"pages": [page]}})
+                    with open(DONE_FILE, "a", encoding="utf-8") as f:
+                        f.write(original_title + "\n")
+                    saved_count += 1
+                    pbar.update(1)
+
+                    # expand links if allowed
+                    depth = depth_by_title.get(original_title, 0)
+                    if depth < max_depth:
+                        try:
+                            for lt in fetch_links(original_title, delay):
+                                if lt not in visited and is_footballish(lt):
+                                    queue.append((lt, depth + 1))
+                        except Exception as le:
+                            print(f"⚠️ Link expand error for {original_title}: {le}")
 
             except requests.HTTPError as he:
                 status = getattr(he.response, "status_code", None) or 0
-                retryable = status in RETRYABLE_STATUS
-                print(f"❌ Error fetching {title}: {status} retryable={retryable}")
-                append_error(title, status, retryable, str(he))
+                for bt in batch_titles:
+                    append_error(bt, status, status in RETRYABLE_STATUS, str(he))
             except Exception as e:
-                print(f"❌ Error fetching {title}: {e}")
-                append_error(title, 0, True, str(e))
+                for bt in batch_titles:
+                    append_error(bt, 0, True, str(e))
             finally:
                 time.sleep(delay)
 
     manifest_path = os.path.join(OUTPUT_DIR, "manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(
-            {"source": "wikipedia vi", "items": [r["title"] for r in results]},
+            {"source": "wikipedia vi", "items": list(visited)},
             f,
             ensure_ascii=False,
             indent=2,
@@ -312,27 +290,22 @@ def run(max_depth: int, max_pages: int, delay: float, full: bool, mode: str):
 
 
 def parse_args():
-    p = argparse.ArgumentParser(description="Wikipedia VI football crawler (BFS)")
+    p = argparse.ArgumentParser(description="Wikipedia VI football crawler (wikitext, batched)")
     p.add_argument("--max-depth", type=int, default=DEFAULT_MAX_DEPTH)
     p.add_argument("--max-pages", type=int, default=DEFAULT_MAX_PAGES)
     p.add_argument("--delay", type=float, default=DEFAULT_DELAY)
-    p.add_argument(
-        "--full", action="store_true", help="Tải toàn bộ extract thay vì chỉ intro"
-    )
-    p.add_argument(
-        "--mode", choices=["extract", "wikitext", "html"], default=DEFAULT_MODE
-    )
+    p.add_argument("--batch-size", type=int, default=BATCH_SIZE)
     return p.parse_args()
 
 
 def main():
     args = parse_args()
+    global BATCH_SIZE
+    BATCH_SIZE = args.batch_size
     run(
         max_depth=args.max_depth,
         max_pages=args.max_pages,
         delay=args.delay,
-        full=args.full,
-        mode=args.mode,
     )
 
 
