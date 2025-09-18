@@ -1,0 +1,143 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+@prefix res: <https://kg-football.vn/resource/> .
+
+# Match and participation
+kg:Match rdfs:subClassOf schema:SportsEvent .
+
+kg:homeTeam a owl:ObjectProperty ;
+  rdfs:label "home team"@en , "đội nhà"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range kg:Team .
+
+kg:awayTeam a owl:ObjectProperty ;
+  rdfs:label "away team"@en , "đội khách"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range kg:Team .
+
+kg:referee a owl:ObjectProperty ;
+  rdfs:label "referee"@en , "trọng tài"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range kg:Referee .
+
+kg:inCompetition a owl:ObjectProperty ;
+  rdfs:label "in competition"@en , "thuộc giải"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range kg:Competition .
+
+kg:inSeason a owl:ObjectProperty ;
+  rdfs:label "in season"@en , "thuộc mùa giải"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range kg:Season .
+
+kg:kickoffTime a owl:DatatypeProperty ;
+  rdfs:label "kickoff time"@en , "thời gian bắt đầu"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range xsd:dateTime .
+
+kg:attendance a owl:DatatypeProperty ;
+  rdfs:label "attendance"@en , "khán giả"@vi ;
+  rdfs:domain kg:Match ;
+  rdfs:range xsd:integer .
+
+# Qualified participation (Appearance)
+kg:Appearance a owl:Class ;
+  rdfs:label "Appearance"@en , "Ra sân"@vi .
+
+kg:appearanceOf a owl:ObjectProperty ;
+  rdfs:label "appearance of"@en , "của cầu thủ"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range kg:Player .
+
+kg:appearanceInMatch a owl:ObjectProperty ;
+  rdfs:label "appearance in match"@en , "trong trận"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range kg:Match .
+
+kg:appearanceForTeam a owl:ObjectProperty ;
+  rdfs:label "appearance for team"@en , "cho đội"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range kg:Team .
+
+kg:isStarter a owl:DatatypeProperty ;
+  rdfs:label "is starter"@en , "đá chính"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range xsd:boolean .
+
+kg:minutesPlayed a owl:DatatypeProperty ;
+  rdfs:label "minutes played"@en , "phút thi đấu"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range xsd:integer .
+
+kg:positionAtMatch a owl:ObjectProperty ;
+  rdfs:label "position at match"@en , "vị trí trận đấu"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range kg:Position .
+
+kg:shirtNumber a owl:DatatypeProperty ;
+  rdfs:label "shirt number"@en , "số áo"@vi ;
+  rdfs:domain kg:Appearance ;
+  rdfs:range xsd:integer .
+
+# Match Events
+kg:MatchEvent a owl:Class ;
+  rdfs:label "Match Event"@en , "Sự kiện trận đấu"@vi .
+
+kg:inMatch a owl:ObjectProperty ;
+  rdfs:label "in match"@en , "thuộc trận"@vi ;
+  rdfs:domain kg:MatchEvent ;
+  rdfs:range kg:Match .
+
+kg:byPlayer a owl:ObjectProperty ;
+  rdfs:label "by player"@en , "bởi cầu thủ"@vi ;
+  rdfs:domain kg:MatchEvent ;
+  rdfs:range kg:Player .
+
+kg:forTeam a owl:ObjectProperty ;
+  rdfs:label "for team"@en , "cho đội"@vi ;
+  rdfs:domain kg:MatchEvent ;
+  rdfs:range kg:Team .
+
+kg:minute a owl:DatatypeProperty ;
+  rdfs:label "minute"@en , "phút"@vi ;
+  rdfs:domain kg:MatchEvent ;
+  rdfs:range xsd:integer .
+
+kg:second a owl:DatatypeProperty ;
+  rdfs:label "second"@en , "giây"@vi ;
+  rdfs:domain kg:MatchEvent ;
+  rdfs:range xsd:integer .
+
+kg:GoalEvent a owl:Class ;
+  rdfs:label "Goal"@en , "Bàn thắng"@vi ;
+  rdfs:subClassOf kg:MatchEvent .
+
+kg:isOwnGoal a owl:DatatypeProperty ;
+  rdfs:label "is own goal"@en , "phản lưới"@vi ;
+  rdfs:domain kg:GoalEvent ;
+  rdfs:range xsd:boolean .
+
+kg:isPenalty a owl:DatatypeProperty ;
+  rdfs:label "is penalty"@en , "phạt đền"@vi ;
+  rdfs:domain kg:GoalEvent ;
+  rdfs:range xsd:boolean .
+
+kg:AssistEvent a owl:Class ;
+  rdfs:label "Assist"@en , "Kiến tạo"@vi ;
+  rdfs:subClassOf kg:MatchEvent .
+
+kg:CardEvent a owl:Class ;
+  rdfs:label "Card"@en , "Thẻ"@vi ;
+  rdfs:subClassOf kg:MatchEvent .
+
+kg:cardType a owl:DatatypeProperty ;
+  rdfs:label "card type"@en , "loại thẻ"@vi ;
+  rdfs:domain kg:CardEvent ;
+  rdfs:range xsd:string .
+
+

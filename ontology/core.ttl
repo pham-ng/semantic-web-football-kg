@@ -18,7 +18,13 @@
   dct:creator "KG Football Team" ;
   dct:license <https://creativecommons.org/licenses/by/4.0/> ;
   dct:issued "2025-09-17"^^xsd:date ;
-  owl:versionInfo "0.1.0" .
+  owl:versionInfo "0.2.0" ;
+  owl:imports <https://kg-football.vn/ontology/org> ,
+              <https://kg-football.vn/ontology/people> ,
+              <https://kg-football.vn/ontology/geo> ,
+              <https://kg-football.vn/ontology/competition> ,
+              <https://kg-football.vn/ontology/match> ,
+              <https://kg-football.vn/ontology/transfer> .
 
 kg:Player a owl:Class ;
   rdfs:label "Player"@en , "Cầu thủ"@vi ;

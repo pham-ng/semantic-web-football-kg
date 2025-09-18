@@ -1,0 +1,73 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+@prefix res: <https://kg-football.vn/resource/> .
+
+# Membership (Player in Team over time)
+kg:Membership a owl:Class ;
+  rdfs:label "Membership"@en , "Thành viên"@vi .
+
+kg:member a owl:ObjectProperty ;
+  rdfs:label "member"@en , "thành viên"@vi ;
+  rdfs:domain kg:Membership ;
+  rdfs:range kg:Player .
+
+kg:ofTeam a owl:ObjectProperty ;
+  rdfs:label "of team"@en , "thuộc đội"@vi ;
+  rdfs:domain kg:Membership ;
+  rdfs:range kg:Team .
+
+kg:from a owl:DatatypeProperty ;
+  rdfs:label "from (date)"@en , "từ ngày"@vi ;
+  rdfs:domain kg:Membership ;
+  rdfs:range xsd:date .
+
+kg:to a owl:DatatypeProperty ;
+  rdfs:label "to (date)"@en , "đến ngày"@vi ;
+  rdfs:domain kg:Membership ;
+  rdfs:range xsd:date .
+
+kg:role a owl:DatatypeProperty ;
+  rdfs:label "role"@en , "vai trò"@vi ;
+  rdfs:domain kg:Membership ;
+  rdfs:range xsd:string .
+
+# Transfer
+kg:Transfer a owl:Class ;
+  rdfs:label "Transfer"@en , "Chuyển nhượng"@vi .
+
+kg:transferPlayer a owl:ObjectProperty ;
+  rdfs:label "transfer player"@en , "cầu thủ"@vi ;
+  rdfs:domain kg:Transfer ;
+  rdfs:range kg:Player .
+
+kg:fromClub a owl:ObjectProperty ;
+  rdfs:label "from club"@en , "từ CLB"@vi ;
+  rdfs:domain kg:Transfer ;
+  rdfs:range kg:Club .
+
+kg:toClub a owl:ObjectProperty ;
+  rdfs:label "to club"@en , "đến CLB"@vi ;
+  rdfs:domain kg:Transfer ;
+  rdfs:range kg:Club .
+
+kg:transferDate a owl:DatatypeProperty ;
+  rdfs:label "transfer date"@en , "ngày chuyển nhượng"@vi ;
+  rdfs:domain kg:Transfer ;
+  rdfs:range xsd:date .
+
+kg:fee a owl:DatatypeProperty ;
+  rdfs:label "fee"@en , "phí"@vi ;
+  rdfs:domain kg:Transfer ;
+  rdfs:range xsd:decimal .
+
+kg:currency a owl:DatatypeProperty ;
+  rdfs:label "currency"@en , "tiền tệ"@vi ;
+  rdfs:domain kg:Transfer ;
+  rdfs:range xsd:string .
+
+

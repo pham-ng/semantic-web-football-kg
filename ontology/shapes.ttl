@@ -1,0 +1,57 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+
+# Player shape
+kg:PlayerShape a sh:NodeShape ;
+  sh:targetClass kg:Player ;
+  sh:property [ sh:path foaf:name ; sh:minCount 1 ; ] ;
+  sh:property [ sh:path kg:nationality ; sh:minCount 1 ; sh:class kg:Country ; ] ;
+  sh:property [ sh:path kg:birthDate ; sh:datatype xsd:date ; ] ;
+  sh:property [ sh:path kg:height ; sh:datatype xsd:decimal ; ] ;
+  sh:property [ sh:path kg:weight ; sh:datatype xsd:decimal ; ] .
+
+# Club shape
+kg:ClubShape a sh:NodeShape ;
+  sh:targetClass kg:Club ;
+  sh:property [ sh:path rdfs:label ; sh:minCount 1 ; ] ;
+  sh:property [ sh:path kg:homeStadium ; sh:class kg:Stadium ; sh:maxCount 1 ; ] .
+
+# Match shape
+kg:MatchShape a sh:NodeShape ;
+  sh:targetClass kg:Match ;
+  sh:property [ sh:path kg:homeTeam ; sh:minCount 1 ; sh:class kg:Team ; ] ;
+  sh:property [ sh:path kg:awayTeam ; sh:minCount 1 ; sh:class kg:Team ; ] ;
+  sh:property [ sh:path kg:kickoffTime ; sh:minCount 1 ; sh:datatype xsd:dateTime ; ] ;
+  sh:sparql [
+    a sh:SPARQLConstraint ;
+    sh:message "homeTeam must be different from awayTeam"@en ;
+    sh:select """
+      SELECT $this WHERE {
+        $this kg:homeTeam ?h ; kg:awayTeam ?a .
+        FILTER(?h = ?a)
+      }
+    """ ;
+  ] .
+
+# Appearance shape
+kg:AppearanceShape a sh:NodeShape ;
+  sh:targetClass kg:Appearance ;
+  sh:property [ sh:path kg:appearanceOf ; sh:minCount 1 ; sh:class kg:Player ; ] ;
+  sh:property [ sh:path kg:appearanceForTeam ; sh:minCount 1 ; sh:class kg:Team ; ] ;
+  sh:property [ sh:path kg:appearanceInMatch ; sh:minCount 1 ; sh:class kg:Match ; ] ;
+  sh:property [ sh:path kg:minutesPlayed ; sh:datatype xsd:integer ; ] .
+
+# Transfer shape
+kg:TransferShape a sh:NodeShape ;
+  sh:targetClass kg:Transfer ;
+  sh:property [ sh:path kg:transferPlayer ; sh:minCount 1 ; sh:class kg:Player ; ] ;
+  sh:property [ sh:path kg:fromClub ; sh:minCount 1 ; sh:class kg:Club ; ] ;
+  sh:property [ sh:path kg:toClub ; sh:minCount 1 ; sh:class kg:Club ; ] ;
+  sh:property [ sh:path kg:transferDate ; sh:datatype xsd:date ; ] ;
+  sh:property [ sh:path kg:fee ; sh:datatype xsd:decimal ; ] .
+
+

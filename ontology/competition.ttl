@@ -1,0 +1,46 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+@prefix res: <https://kg-football.vn/resource/> .
+
+kg:Competition a owl:Class ;
+  rdfs:label "Competition"@en , "Giải đấu"@vi ;
+  rdfs:subClassOf schema:SportsOrganization .
+
+kg:League a owl:Class ;
+  rdfs:label "League"@en , "Giải VĐQG"@vi ;
+  rdfs:subClassOf kg:Competition .
+
+kg:Cup a owl:Class ;
+  rdfs:label "Cup"@en , "Cúp"@vi ;
+  rdfs:subClassOf kg:Competition .
+
+kg:Season a owl:Class ;
+  rdfs:label "Season"@en , "Mùa giải"@vi .
+
+kg:hasSeason a owl:ObjectProperty ;
+  rdfs:label "has season"@en , "có mùa giải"@vi ;
+  rdfs:domain kg:Competition ;
+  rdfs:range kg:Season ;
+  owl:inverseOf kg:seasonOf .
+
+kg:seasonOf a owl:ObjectProperty ;
+  rdfs:label "season of"@en , "mùa của"@vi ;
+  rdfs:domain kg:Season ;
+  rdfs:range kg:Competition .
+
+kg:participatesIn a owl:ObjectProperty ;
+  rdfs:label "participates in"@en , "tham dự"@vi ;
+  rdfs:domain kg:Team ;
+  rdfs:range kg:Season .
+
+kg:tier a owl:DatatypeProperty ;
+  rdfs:label "tier"@en , "hạng"@vi ;
+  rdfs:domain kg:Competition ;
+  rdfs:range xsd:integer .
+
+

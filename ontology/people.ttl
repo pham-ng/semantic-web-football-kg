@@ -1,0 +1,80 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema: <http://schema.org/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix kg: <https://kg-football.vn/ontology#> .
+@prefix res: <https://kg-football.vn/resource/> .
+
+# Extend Player attributes
+kg:birthPlace a owl:ObjectProperty ;
+  rdfs:label "birth place"@en , "quê quán"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:City .
+
+kg:nationality a owl:ObjectProperty ;
+  rdfs:label "nationality"@en , "quốc tịch"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Country .
+
+kg:height a owl:DatatypeProperty ;
+  rdfs:label "height (m)"@en , "chiều cao (m)"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range xsd:decimal .
+
+kg:weight a owl:DatatypeProperty ;
+  rdfs:label "weight (kg)"@en , "cân nặng (kg)"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range xsd:decimal .
+
+kg:Footedness a owl:Class ;
+  rdfs:label "Footedness"@en , "Chân thuận"@vi .
+
+kg:preferredFoot a owl:ObjectProperty ;
+  rdfs:label "preferred foot"@en , "chân thuận"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Footedness .
+
+kg:LeftFooted a kg:Footedness ;
+  rdfs:label "Left"@en , "Chân trái"@vi .
+
+kg:RightFooted a kg:Footedness ;
+  rdfs:label "Right"@en , "Chân phải"@vi .
+
+# Position hierarchy and mappings
+kg:Goalkeeper a owl:Class ;
+  rdfs:label "Goalkeeper"@en , "Thủ môn"@vi ;
+  rdfs:subClassOf kg:Position .
+
+kg:Defender a owl:Class ;
+  rdfs:label "Defender"@en , "Hậu vệ"@vi ;
+  rdfs:subClassOf kg:Position .
+
+kg:Midfielder a owl:Class ;
+  rdfs:label "Midfielder"@en , "Tiền vệ"@vi ;
+  rdfs:subClassOf kg:Position .
+
+kg:Forward a owl:Class ;
+  rdfs:label "Forward"@en , "Tiền đạo"@vi ;
+  rdfs:subClassOf kg:Position .
+
+kg:playsPosition a owl:ObjectProperty ;
+  rdfs:label "plays position"@en , "chơi ở vị trí"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Position .
+
+kg:primaryPosition a owl:ObjectProperty ;
+  rdfs:label "primary position"@en , "vị trí sở trường"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Position ;
+  rdfs:subPropertyOf kg:playsPosition .
+
+kg:secondaryPosition a owl:ObjectProperty ;
+  rdfs:label "secondary position"@en , "vị trí phụ"@vi ;
+  rdfs:domain kg:Player ;
+  rdfs:range kg:Position ;
+  rdfs:subPropertyOf kg:playsPosition .
+
+
