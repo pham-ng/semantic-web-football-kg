@@ -153,3 +153,29 @@ res:position/Midfielder a kg:Midfielder ;
 res:stadium/My_Dinh a kg:Stadium ;
   rdfs:label "Mỹ Đình Stadium"@en , "Sân vận động Mỹ Đình"@vi ;
   schema:name "Mỹ Đình"@vi .
+
+
+@prefix dbo:  <http://dbpedia.org/ontology/> .
+
+### ALIGN LỚP VỚI DBPEDIA 
+kg:Player       rdfs:subClassOf dbo:SoccerPlayer .
+kg:Team         rdfs:subClassOf dbo:SportsTeam .
+kg:Club         rdfs:subClassOf dbo:SoccerClub .
+kg:NationalTeam rdfs:subClassOf dbo:SportsTeam .
+kg:Match        rdfs:subClassOf dbo:SoccerMatch .
+
+
+kg:Stadium a owl:Class ;
+  rdfs:label "Stadium"@en , "Sân vận động"@vi ;
+  rdfs:subClassOf dbo:Stadium .
+
+### ALIGN THUỘC TÍNH VỚI DBPEDIA 
+kg:playsFor         rdfs:subPropertyOf dbo:team .
+kg:primaryPosition  rdfs:subPropertyOf dbo:position .
+kg:birthDate        rdfs:subPropertyOf dbo:birthDate .
+kg:shirtNumber      rdfs:subPropertyOf dbo:number .
+kg:homeTeam         rdfs:subPropertyOf dbo:homeTeam .
+kg:awayTeam         rdfs:subPropertyOf dbo:awayTeam .
+kg:venue            rdfs:subPropertyOf dbo:location .
+kg:kickoffTime      rdfs:subPropertyOf dbo:time .
+
