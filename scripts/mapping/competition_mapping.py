@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Generate DBpedia mappings for ontology/competition.ttl
+
+- Default MODE = "sub": use rdfs:subClassOf / rdfs:subPropertyOf (khuyên dùng)
+- MODE = "equiv": use owl:equivalentClass / owl:equivalentProperty (chỉ khi semantics trùng 100%)
+
+Output: ontology/mapping/map_competition_dbpedia.ttl
+"""
+
 from rdflib import Graph, Namespace, RDFS, OWL
 
 # ----- CONFIG -----
@@ -43,3 +55,37 @@ PROP_MAPPING = {
     KG.participantCount: DBO.numberOfTeams,
     KG.competitionName:  RDFS.label,        # phụ trợ về tên
 }
+
+# ----- MAIN -----
+def main():
+    g = Graph()
+    g.parse(INPUT_TTL, format="turtle")
+
+    # Bind prefixes for nicer TTL
+    g.bind("kg", KG)
+    g.bind("dbo", DBO)
+    g.bind("schema", SCHEMA)
+    g.bind("time", TIME)
+    g.bind("rdfs", RDFS)
+    g.bind("owl", OWL)
+
+    # Add class mappings
+    for kg_cls, dbo_cls in CLASS_MAPPING.items():
+        if MODE == "equiv":
+            g.add((kg_cls, OWL.equivalentClass, dbo_cls))
+        else:
+            g.add((kg_cls, RDFS.subClassOf, dbo_cls))
+
+    # Add property mappings
+    for kg_prop, dbo_prop in PROP_MAPPING.items():
+        if MODE == "equiv":
+            g.add((kg_prop, OWL.equivalentProperty, dbo_prop))
+        else:
+            g.add((kg_prop, RDFS.subPropertyOf, dbo_prop))
+
+    # Serialize
+    g.serialize(OUTPUT_TTL, format="turtle")
+    print(f"Done: wrote {OUTPUT_TTL} (mode={MODE})")
+
+if __name__ == "__main__":
+    main()
