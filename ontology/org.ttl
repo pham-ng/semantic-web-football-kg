@@ -3,83 +3,84 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix schema: <http://schema.org/> .
-@prefix prov: <http://www.w3.org/ns/prov#> .
-@prefix geo: <http://www.opengis.net/ont/geosparql#> .
 @prefix kg: <https://kg-football.vn/ontology#> .
 @prefix res: <https://kg-football.vn/resource/> .
 
-kg:Team a owl:Class ;
-  rdfs:label "Team"@en , "Đội bóng"@vi ;
-  rdfs:subClassOf schema:SportsTeam .
-
-kg:Club rdfs:subClassOf kg:Team .
-
-kg:NationalTeam a owl:Class ;
-  rdfs:label "National Team"@en , "Đội tuyển quốc gia"@vi ;
-  rdfs:subClassOf kg:Team .
-
-kg:Coach a owl:Class ;
-  rdfs:label "Coach"@en , "Huấn luyện viên"@vi ;
-  rdfs:subClassOf schema:Person .
-
-kg:Owner a owl:Class ;
-  rdfs:label "Owner"@en , "Chủ sở hữu"@vi ;
-  rdfs:subClassOf schema:Person .
-
-kg:Referee a owl:Class ;
-  rdfs:label "Referee"@en , "Trọng tài"@vi ;
-  rdfs:subClassOf schema:Person .
-
+# Stadium and Venue
 kg:Stadium a owl:Class ;
   rdfs:label "Stadium"@en , "Sân vận động"@vi ;
+  rdfs:comment "Football stadium"@en ;
   rdfs:subClassOf schema:SportsVenue .
-
-# Properties (domain/range, inverses where useful)
-kg:homeStadium a owl:ObjectProperty ;
-  rdfs:label "home stadium"@en , "sân nhà"@vi ;
-  rdfs:domain kg:Club ;
-  rdfs:range kg:Stadium ;
-  owl:inverseOf kg:isHomeOf .
-
-kg:isHomeOf a owl:ObjectProperty ;
-  rdfs:label "is home of"@en , "là sân nhà của"@vi ;
-  rdfs:domain kg:Stadium ;
-  rdfs:range kg:Club .
-
-kg:manages a owl:ObjectProperty ;
-  rdfs:label "manages"@en , "dẫn dắt"@vi ;
-  rdfs:domain kg:Coach ;
-  rdfs:range kg:Team ;
-  owl:inverseOf kg:hasCoach .
-
-kg:hasCoach a owl:ObjectProperty ;
-  rdfs:label "has coach"@en , "có HLV"@vi ;
-  rdfs:domain kg:Team ;
-  rdfs:range kg:Coach .
-
-kg:owns a owl:ObjectProperty ;
-  rdfs:label "owns"@en , "sở hữu"@vi ;
-  rdfs:domain kg:Owner ;
-  rdfs:range kg:Club ;
-  owl:inverseOf kg:hasOwner .
-
-kg:hasOwner a owl:ObjectProperty ;
-  rdfs:label "has owner"@en , "có chủ sở hữu"@vi ;
-  rdfs:domain kg:Club ;
-  rdfs:range kg:Owner .
 
 kg:capacity a owl:DatatypeProperty ;
   rdfs:label "capacity"@en , "sức chứa"@vi ;
+  rdfs:comment "Maximum capacity of the stadium"@en ;
   rdfs:domain kg:Stadium ;
-  rdfs:range xsd:integer .
+  rdfs:range xsd:positiveInteger ;
+  rdfs:subPropertyOf schema:maximumAttendeeCapacity .
 
+kg:homeStadium a owl:ObjectProperty ;
+  rdfs:label "home stadium"@en , "sân nhà"@vi ;
+  rdfs:comment "Home stadium of a club"@en ;
+  rdfs:domain kg:Club ;
+  rdfs:range kg:Stadium ;
+  owl:inverseOf kg:isHomeOf ;
+  rdfs:subPropertyOf schema:location .
+
+kg:isHomeOf a owl:ObjectProperty ;
+  rdfs:label "is home of"@en , "là sân nhà của"@vi ;
+  rdfs:comment "Stadium is home of a club"@en ;
+  rdfs:domain kg:Stadium ;
+  rdfs:range kg:Club ;
+  rdfs:subPropertyOf schema:containedInPlace .
+
+# Club properties
 kg:foundedDate a owl:DatatypeProperty ;
   rdfs:label "founded date"@en , "ngày thành lập"@vi ;
+  rdfs:comment "Date when the club was founded"@en ;
   rdfs:domain kg:Club ;
-  rdfs:range xsd:date .
+  rdfs:range xsd:date ;
+  rdfs:subPropertyOf schema:foundingDate .
 
-kg:venue a owl:ObjectProperty ;
-  rdfs:label "venue"@en , "địa điểm"@vi ;
-  rdfs:range kg:Stadium .
+kg:league a owl:ObjectProperty ;
+  rdfs:label "league"@en , "giải đấu"@vi ;
+  rdfs:comment "League that the club participates in"@en ;
+  rdfs:domain kg:Club ;
+  rdfs:range kg:League ;
+  rdfs:subPropertyOf schema:memberOf .
 
+# Team management
+kg:Owner a owl:Class ;
+  rdfs:label "Owner"@en , "Chủ sở hữu"@vi ;
+  rdfs:comment "Club owner"@en ;
+  rdfs:subClassOf schema:Person .
 
+kg:owns a owl:ObjectProperty ;
+  rdfs:label "owns"@en , "sở hữu"@vi ;
+  rdfs:comment "Owner owns a club"@en ;
+  rdfs:domain kg:Owner ;
+  rdfs:range kg:Club ;
+  owl:inverseOf kg:hasOwner ;
+  rdfs:subPropertyOf schema:owns .
+
+kg:hasOwner a owl:ObjectProperty ;
+  rdfs:label "has owner"@en , "có chủ sở hữu"@vi ;
+  rdfs:comment "Club has an owner"@en ;
+  rdfs:domain kg:Club ;
+  rdfs:range kg:Owner ;
+  rdfs:subPropertyOf schema:owner .
+
+# Team statistics
+kg:teamName a owl:DatatypeProperty ;
+  rdfs:label "team name"@en , "tên đội"@vi ;
+  rdfs:comment "Official name of the team"@en ;
+  rdfs:domain kg:Team ;
+  rdfs:range xsd:string ;
+  rdfs:subPropertyOf schema:name .
+
+kg:teamAbbreviation a owl:DatatypeProperty ;
+  rdfs:label "team abbreviation"@en , "tên viết tắt"@vi ;
+  rdfs:comment "Short abbreviation of the team name"@en ;
+  rdfs:domain kg:Team ;
+  rdfs:range xsd:string ;
+  rdfs:subPropertyOf schema:alternateName .
