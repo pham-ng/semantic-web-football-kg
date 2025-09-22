@@ -148,3 +148,32 @@ kg:DomesticCompetition a owl:Class ;
 kg:InternationalCompetition a owl:Class ;
   rdfs:label "International Competition"@en , "Giải đấu quốc tế"@vi ;
   rdfs:subClassOf kg:CompetitionType .
+
+@prefix dbo: <http://dbpedia.org/ontology/> .
+
+### LỚP NỀN 
+kg:Team a owl:Class ; rdfs:subClassOf dbo:SportsTeam ;
+  rdfs:label "Đội bóng"@vi , "Team"@en .
+kg:Country a owl:Class ; rdfs:subClassOf dbo:Country ;
+  rdfs:label "Quốc gia"@vi , "Country"@en .
+kg:Organization rdfs:subClassOf dbo:Organisation .
+
+### ALIGN LỚP — GIỮ schema/time, THÊM dbo
+kg:Competition rdfs:subClassOf dbo:SportsTournament .
+kg:League      rdfs:subClassOf dbo:SoccerLeague .
+kg:Cup         rdfs:subClassOf dbo:SportsTournament .
+kg:Tournament  rdfs:subClassOf dbo:SportsTournament .
+kg:Season      rdfs:subClassOf dbo:SoccerLeagueSeason .
+
+### ALIGN THUỘC TÍNH — GIỮ schema/time, THÊM dbo
+kg:hasSeason   rdfs:subPropertyOf dbo:season .
+kg:seasonOf    rdfs:subPropertyOf dbo:season .
+kg:seasonStart rdfs:subPropertyOf dbo:startDate .
+kg:seasonEnd   rdfs:subPropertyOf dbo:endDate .
+kg:participatesIn rdfs:subPropertyOf dbo:team .
+kg:organizes   rdfs:subPropertyOf dbo:organiser .
+kg:organizedBy rdfs:subPropertyOf dbo:organiser .
+kg:heldIn      rdfs:subPropertyOf dbo:country .
+kg:participantCount rdfs:subPropertyOf dbo:numberOfTeams .
+kg:competitionName rdfs:subPropertyOf rdfs:label
+
